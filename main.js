@@ -67,7 +67,12 @@ class Main{
     }
 
     getCell(coordinates){
-        return this.cells[coordinates[1]][coordinates[0]]
+        try{
+            return this.cells[coordinates[1]][coordinates[0]]
+        } catch{
+            
+        }
+        
     }
 
     update(){
@@ -112,6 +117,6 @@ setInterval(()=>{
     frameTime+= (thisFrameTime - frameTime) / filterStrength;
     lastLoop = thisLoop;
     document.getElementById("fps").innerText = Math.floor((1000/frameTime)) + " fps";
-}, 5)
+}, 10)
 
 

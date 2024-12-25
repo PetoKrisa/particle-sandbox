@@ -3,67 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Particle Sandbox</title>
+    <link rel="stylesheet" href="/index.css">
 </head>
-<style>
-    html, body{
-        background-color: rgb(80, 80, 89);
-    }
-    canvas{
-        border: 1px solid gray;
-        background-color: rgb(41, 41, 44);
-        width: 600px;
-        height: 600px;
-    }
-    .canvas-container{
-        position: relative;
-    }
-    #fps{
-        z-index: 100px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 10px;
-        padding: 0px;
-        font-family: Arial, Helvetica, sans-serif;
-        color: white;
-    }
 
-    .button-container{
-        max-width: 600px;
-        min-width: 600px;
-        overflow-x: scroll;
-        max-height: 50px;
-        display: flex;
-        flex-direction: row;
-    }
-
-    ::-webkit-scrollbar {
-        width: 5px !important;
-    }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-        width: 5px !important;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: rgb(41, 41, 44);
-        border-radius: 10px;
-        width: 5px !important;
-
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgb(41, 41, 44);
-    }
-
-    .button-container button{
-        border: 1px solid gray;
-        background-color: rgb(41, 41, 44);
-        color: white;
-        font-size: 20pt;
-        margin-right: 10px;
-        border-radius: 10px;
-    }
-</style>
 <body>
     <div class="canvas-container">
         <canvas id="canvas" width="200" height="200">
@@ -80,6 +23,8 @@
         <button id="smokeBtn">Smoke</button>
         <button id="fireBtn">Fire</button>
         <button id="steamBtn">Steam</button>
+        <button id="woodBtn">Wood</button>
+        <button id="steelBtn">Steel</button>
     </div>
 
     <script type="module" src="./main.js"></script>

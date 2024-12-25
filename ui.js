@@ -8,7 +8,6 @@ function getCursorPosition(canvas, event) {
 
     const x = Math.floor((event.clientX - rect.left) * scaleX); 
     const y = Math.floor((event.clientY - rect.top) * scaleY);
-    console.log(x,y)
     return [x,y]
 }
 var typeName = "sand"
@@ -28,6 +27,22 @@ main.canvas.addEventListener('mouseup', (e)=>{
 main.canvas.onmousemove = drawEventHandler
 main.canvas.onmouseup = drawEventHandler
 
+main.canvas.ontouchstart = (e)=>{
+    e.preventDefault()
+    e.stopPropagation()
+    mousePosition = getCursorPosition(canvas, e.touches[0])
+    mouse=true
+}
+main.canvas.ontouchend = (e)=>{
+    mouse=false
+}
+main.canvas.ontouchmove = (e)=>{
+    e.preventDefault()
+    e.stopPropagation()
+    mousePosition = getCursorPosition(canvas, e.touches[0])
+    mouse = true
+}
+
 
 document.getElementById("sandBtn").onclick = ()=>{typeName="sand"}
 document.getElementById("waterBtn").onclick = ()=>{typeName="water"}
@@ -36,7 +51,12 @@ document.getElementById("airBtn").onclick = ()=>{typeName="air"}
 document.getElementById("smokeBtn").onclick = ()=>{typeName="smoke"}
 document.getElementById("fireBtn").onclick = ()=>{typeName="fire"}
 document.getElementById("steamBtn").onclick = ()=>{typeName="steam"}
+document.getElementById("woodBtn").onclick = ()=>{typeName="wood"}
+document.getElementById("steelBtn").onclick = ()=>{typeName="steel"}
 
+
+
+//record mouse position
 setInterval(()=>{        
     if(mouse){
         try{

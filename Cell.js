@@ -69,8 +69,10 @@ export class AirCell extends Cell{
 export class WaterCell extends Cell{
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
+        this.timeToEvaporate = 20;
     }
     hitLeft = false;
+    timeToEvaporate;
     update(){
         
         let x = this.x;
@@ -104,10 +106,13 @@ export class WaterCell extends Cell{
             this.main.getCell([x-1,y+1]).temp >= 100 ||
             this.main.getCell([x+1,y+1]).temp >= 100
             ){
-                this.main.addCell(x,y, Types.steam)
+                this.timeToEvaporate--;
             }
         } catch{}
         
+        if(this.timeToEvaporate == 0){
+            this.main.addCell(x,y, Types.steam)
+        }
 
         this.main.swapCells([x,y], [nextX, nextY])
 
@@ -147,7 +152,7 @@ export class StoneCell extends Cell{
 
         if(avgTemp>this.temp){
             this.temp += 2;
-        } else if (avgTemp<this.temp){
+        } else if (this.type.temp<avgTemp<this.temp){
             this.temp -= 2
         }
 
@@ -168,7 +173,7 @@ export class SmokeCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 200;
+        this.life = 150;
     }
 
 
@@ -217,7 +222,7 @@ export class FireCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 25;
+        this.life = 15;
     }
 
 
@@ -247,6 +252,19 @@ export class FireCell extends Cell{
         if(this.main.isCellFree([x,y-1], this)){
             freeCells = [[x,y-1]]
         }
+
+        if(this.main.getCell([x-1,y-1]).type == Types.water ||
+        this.main.getCell([x,y-1]).type == Types.water ||
+        this.main.getCell([x+1,y-1]).type == Types.water ||
+        this.main.getCell([x-1,y]).type == Types.water ||
+        this.main.getCell([x+1,y]).type == Types.water ||
+        this.main.getCell([x,y+1]).type == Types.water ||
+        this.main.getCell([x-1,y+1]).type == Types.water ||
+        this.main.getCell([x+1,y+1]).type == Types.water
+        ){
+            this.main.addCell(x,y,Types.air)
+            return
+        }
         
         let randomNumber = Math.floor(Math.random() * freeCells.length)
         let nextFreeCell = freeCells[randomNumber]
@@ -254,6 +272,8 @@ export class FireCell extends Cell{
             this.main.swapCells([x,y], [nextFreeCell[0], nextFreeCell[1]])
         } catch{
         }
+
+        
 
         this.life--;
         this.draw()
@@ -268,7 +288,7 @@ export class SteamCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 200;
+        this.life = 120;
     }
 
 
@@ -309,6 +329,113 @@ export class SteamCell extends Cell{
     }
     draw(){
         this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, 1, 1)
+    }
+}
+export class WoodCell extends Cell{
+    constructor(ctx,x,y,type){
+        super(ctx,x,y,type)
+        this.timeToIgnite = 80;
+        this.life = 180;
+        this.onFire == false;
+    }
+    timeToIgnite;
+    onFire;
+    life;
+    update(){
+        
+        let x = this.x
+        let y = this.y
+        let neigbours = [
+            [x-1,y-1],
+            [x,y-1],
+            [x+1,y-1],
+            [x-1,y],
+            [x+1,y],
+            [x+1,y+1],
+            [x,y+1],
+            [x-1,y+1]
+        ]
+        let tempSum = 0;
+        let tempNum = 0;
+        for(let i of neigbours){
+            tempSum += this.main.getCell(i).temp
+            tempNum ++
+        }
+        let avgTemp = Math.floor(tempSum/tempNum)
+
+        if(avgTemp>130 && this.timeToIgnite > 0){
+            this.timeToIgnite --;
+        } else if(this.timeToIgnite==0){
+            this.onFire = true;
+        }
+
+        if(this.onFire == true){
+            this.life --;
+            try{
+                this.main.addCell(this.x, this.y-1, Types.fire)
+                this.main.addCell(this.x-1, this.y, Types.fire)
+                this.main.addCell(this.x+1, this.y, Types.fire)
+            }catch{
+
+            }
+        }
+
+        if(this.life == 0){
+            this.main.addCell(this.x, this.y, Types.air)
+        }
+
+        this.draw()
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, 1, 1)
+    }
+}
+
+export class SteelCell extends Cell{
+    constructor(ctx,x,y,type){
+        super(ctx,x,y,type)
+    }
+    update(){
+        
+        let x = this.x
+        let y = this.y
+        let neigbours = [
+            [x-1,y-1],
+            [x,y-1],
+            [x+1,y-1],
+            [x-1,y],
+            [x+1,y],
+            [x+1,y+1],
+            [x,y+1],
+            [x,y+1],
+            [x-1,y+1],
+            
+        ]
+        let tempSum = 0;
+        let tempNum = 0;
+        for(let i of neigbours){
+            tempSum += this.main.getCell(i).temp
+            tempNum ++
+        }
+        let avgTemp = Math.floor(tempSum/tempNum)
+
+        if(avgTemp>this.temp && avgTemp>this.type.temp){
+            this.temp += 4
+        } else if (this.type.temp<avgTemp<this.temp){
+            this.temp -= 1
+        }
+
+        this.draw()
+    }
+    draw(){
+        //this.ctx.fillStyle = this.color;
+        if(this.temp < 100){
+            this.ctx.fillStyle = this.color;
+        } else{
+            this.ctx.fillStyle = `rgb(${this.temp},0,0)`
+        }
         this.ctx.fillRect(this.x, this.y, 1, 1)
     }
 }
@@ -363,5 +490,19 @@ export const Types = {
         density: 9,
         temp: 99,
         constructor:  SteamCell
+    },
+    "wood": {
+        name: "wood",
+        colors: ["#6b4606", "#57401a", "#4f370d"],
+        density: 20,
+        temp: 24,
+        constructor:  WoodCell
+    },
+    "steel": {
+        name: "steel",
+        colors: ["lightgray"],
+        density: 20,
+        temp: 24,
+        constructor:  SteelCell
     }
 }

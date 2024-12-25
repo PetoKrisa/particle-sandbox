@@ -124,9 +124,7 @@ export class StoneCell extends Cell{
         super(ctx,x,y,type)
     }
     update(){
-        if(this.temp > this.type.temp){
-            this.temp--
-        }
+        
         let x = this.x
         let y = this.y
         let neigbours = [
@@ -135,7 +133,7 @@ export class StoneCell extends Cell{
             [x+1,y-1],
             [x-1,y],
             [x+1,y],
-            [x-1,y+1],
+            [x+1,y+1],
             [x,y+1],
             [x-1,y+1]
         ]
@@ -147,7 +145,11 @@ export class StoneCell extends Cell{
         }
         let avgTemp = Math.floor(tempSum/tempNum)
 
-        this.temp = avgTemp
+        if(avgTemp>this.temp){
+            this.temp += 2;
+        } else if (avgTemp<this.temp){
+            this.temp -= 2
+        }
 
         this.draw()
     }
@@ -266,7 +268,7 @@ export class SteamCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 250;
+        this.life = 200;
     }
 
 
@@ -351,7 +353,7 @@ export const Types = {
     "fire": {
         name: "fire",
         colors: ["#ff4f1f", "#ed5205", "#f22c2c"],
-        density: 9,
+        density: 10,
         temp: 600,
         constructor:  FireCell
     },

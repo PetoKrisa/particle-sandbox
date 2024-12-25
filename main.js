@@ -1,6 +1,6 @@
 import { Cell } from "./Cell.js";
 import { Types } from "./Cell.js";
-
+import { shuffle } from "./shuffle.js";
 class Main{
     ctx;
     canvas;
@@ -73,21 +73,30 @@ class Main{
     update(){
         this.ctx.clearRect(0,0,this.width, this.height)
         this.ctx.imageSmoothingEnabled = false;
-        for(let y = this.height-1; y > 0; y--){
-            for(let x = this.width-1; x > 0; x--){
+        let cellLinearList = [] 
+        for(let y = this.height-1; y >= 0; y--){
+            for(let x = this.width-1; x >= 0; x--){
                 let cellInQuestion = this.cells[y][x]
                 cellInQuestion.processed = false;
+                cellLinearList.push(cellInQuestion)
             }
         } 
-        for(let y = this.height-1; y > 0; y--){
-            for(let x = this.width-1; x > 0; x--){
-                let cellInQuestion = this.cells[y][x]
-                if(!cellInQuestion.processed){
-                    cellInQuestion.update()
-                    cellInQuestion.processed = true;
-                }
+        cellLinearList = shuffle(cellLinearList)
+        //for(let y = this.height-1; y > 0; y--){
+        //    for(let x = this.width-1; x > 0; x--){
+        //        let cellInQuestion = this.cells[y][x]
+        //        if(!cellInQuestion.processed){
+        //            cellInQuestion.update()
+        //            cellInQuestion.processed = true;
+        //        }
+        //    }
+        //}
+        for(let i of cellLinearList){
+            if(!i.processed){
+                i.update()
+                i.processed = true;
             }
-        }        
+        }
     }
     
 }
@@ -103,6 +112,6 @@ setInterval(()=>{
     frameTime+= (thisFrameTime - frameTime) / filterStrength;
     lastLoop = thisLoop;
     document.getElementById("fps").innerText = Math.floor((1000/frameTime)) + " fps";
-}, 18)
+}, 5)
 
 

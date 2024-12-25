@@ -3,10 +3,12 @@ import { Types } from "./Cell.js";
 
 function getCursorPosition(canvas, event) {
     const rect = canvas.getBoundingClientRect()
-    const x = (event.pageX - canvas.offsetLeft)
-    const y = (event.pageY - canvas.offsetTop)
-    const normX = (x-1) / (144-1)
-    const normY = (y-1) / (144-1)
+    const scaleX = canvas.width / rect.width; 
+    const scaleY = canvas.height / rect.height;  
+
+    const x = Math.floor((event.clientX - rect.left) * scaleX); 
+    const y = Math.floor((event.clientY - rect.top) * scaleY);
+    console.log(x,y)
     return [x,y]
 }
 var typeName = "sand"

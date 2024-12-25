@@ -1,0 +1,6 @@
+canvas.clear
+for y
+    for x
+        if szabad [x,y+1]
+            put [x,y+1]
+        cell.draw

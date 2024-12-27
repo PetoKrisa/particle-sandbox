@@ -52,7 +52,10 @@ class Main{
     }
 
     addCell(x,y,type){
-        this.cells[y][x] = new type.constructor(this, x, y, type)
+        if(0<=x<this.width && 0<=y<this.height){
+            this.cells[y][x] = new type.constructor(this, x, y, type)
+        }
+        
     }
 
     swapCells(coordinatesFrom, coordinatesTo){
@@ -67,10 +70,12 @@ class Main{
     }
 
     getCell(coordinates){
-        try{
-            return this.cells[coordinates[1]][coordinates[0]]
-        } catch{
-            
+        if(0<=coordinates[0]<this.width && 0<=coordinates[1]<this.height){
+            try{
+                return this.cells[coordinates[1]][coordinates[0]]
+            } catch{
+                //cell is outside border
+            }
         }
         
     }

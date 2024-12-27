@@ -145,8 +145,13 @@ export class StoneCell extends Cell{
         let tempSum = 0;
         let tempNum = 0;
         for(let i of neigbours){
-            tempSum += this.main.getCell(i).temp
-            tempNum ++
+            try{
+                tempSum += this.main.getCell(i).temp
+                tempNum ++
+            } catch{
+                //the particle is outside borders so ignore it
+            }
+            
         }
         let avgTemp = Math.floor(tempSum/tempNum)
 
@@ -253,18 +258,23 @@ export class FireCell extends Cell{
             freeCells = [[x,y-1]]
         }
 
-        if(this.main.getCell([x-1,y-1]).type == Types.water ||
-        this.main.getCell([x,y-1]).type == Types.water ||
-        this.main.getCell([x+1,y-1]).type == Types.water ||
-        this.main.getCell([x-1,y]).type == Types.water ||
-        this.main.getCell([x+1,y]).type == Types.water ||
-        this.main.getCell([x,y+1]).type == Types.water ||
-        this.main.getCell([x-1,y+1]).type == Types.water ||
-        this.main.getCell([x+1,y+1]).type == Types.water
-        ){
-            this.main.addCell(x,y,Types.air)
-            return
+        try{
+            if(this.main.getCell([x-1,y-1]).type == Types.water ||
+            this.main.getCell([x,y-1]).type == Types.water ||
+            this.main.getCell([x+1,y-1]).type == Types.water ||
+            this.main.getCell([x-1,y]).type == Types.water ||
+            this.main.getCell([x+1,y]).type == Types.water ||
+            this.main.getCell([x,y+1]).type == Types.water ||
+            this.main.getCell([x-1,y+1]).type == Types.water ||
+            this.main.getCell([x+1,y+1]).type == Types.water
+            ){
+                this.main.addCell(x,y,Types.air)
+                return
+            }
+        } catch{
+            
         }
+        
         
         let randomNumber = Math.floor(Math.random() * freeCells.length)
         let nextFreeCell = freeCells[randomNumber]

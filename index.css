@@ -1,11 +1,11 @@
 html, body{
-    background-color: rgb(80, 80, 89);
+    background-color: rgb(34, 34, 36);
     user-select: none;
     -webkit-user-drag: none;
 }
 canvas{
-    border: 1px solid gray;
-    background-color: rgb(41, 41, 44);
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(34, 34, 36);
     width: 600px;
     height: 600px;
 }
@@ -29,6 +29,7 @@ canvas{
     overflow-x: scroll;
     display: flex;
     flex-direction: row;
+    padding-bottom: 5px;
 }
 
 ::-webkit-scrollbar {
@@ -39,22 +40,45 @@ canvas{
     width: 5px !important;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgb(41, 41, 44);
+    background: rgb(79, 79, 84);
     border-radius: 10px;
     width: 5px !important;
 
 }
-::-webkit-scrollbar-thumb:hover {
-    background: rgb(41, 41, 44);
-}
 
 .button-container button{
-    border: 1px solid gray;
-    background-color: rgb(41, 41, 44);
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(34, 34, 36);
     color: white;
     font-size: 20pt;
     margin-right: 10px;
     border-radius: 10px;
+}
+
+#github{
+    color: white;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    align-items: center;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 4px;
+    position:fixed;
+    bottom: 5px;
+    right: 5px;
+
+}
+#github p{
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0px;
+    margin: 5px;
+    margin-bottom: 2px;
+}
+#github img{
+    filter: invert();
+    max-width: 30px;
+    max-height: 30px;
 }
 
 @media (max-width: 619px){

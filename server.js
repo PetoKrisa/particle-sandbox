@@ -19,8 +19,8 @@ app.get("/ui.js", (req,res)=>{
 app.get("/Cell.js", (req,res)=>{
     res.sendFile(`${__dirname}\\Cell.js`)
 })
-app.get("/index.css", (req,res)=>{
-    res.sendFile(`${__dirname}\\index.css`)
+app.get("/styles.css", (req,res)=>{
+    res.sendFile(`${__dirname}\\styles.css`)
 })
 
 app.listen(PORT, ()=>{

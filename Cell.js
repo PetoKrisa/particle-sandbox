@@ -70,6 +70,7 @@ export class WaterCell extends Cell{
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
         this.timeToEvaporate = 20;
+        this.hitLeft = false;
     }
     hitLeft = false;
     timeToEvaporate;
@@ -79,7 +80,9 @@ export class WaterCell extends Cell{
         let y = this.y;
         let nextX = x;
         let nextY = y;
-
+        let freeSides = []
+        let freeBelow = false
+        
         if(this.main.isCellFree([x,y+1], this)){
             nextY = y+1
         } else if(this.main.isCellFree([x-1,y+1], this)){
@@ -88,13 +91,23 @@ export class WaterCell extends Cell{
         } else if(this.main.isCellFree([x+1,y+1], this)){
             nextY = y+1
             nextX = x+1
-        } else if(this.main.isCellFree([x-1, y], this)){
-            nextX = x-1;
-            nextY = y;
-        } else if(this.main.isCellFree([x+1, y], this)){
-            nextX = x+1;
-            nextY = y;
+        } 
+        else if(this.main.isCellFree([x-1, y], this) && !this.hitLeft){
+            nextY = y
+            nextX = x-1
         }
+        else if(this.main.isCellFree([x+1, y], this)){
+            nextY = y
+            nextX = x+1
+        }
+
+        if(!this.main.isCellFree([x-1, y], this)){
+            this.hitLeft = true
+        }
+        if(!this.main.isCellFree([x+1, y], this)){
+            this.hitLeft = false
+        }
+
         
         try{
             if(this.main.getCell([x-1,y-1]).temp >= 100 ||

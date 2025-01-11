@@ -405,8 +405,41 @@ export class WoodCell extends Cell{
         }
 
         if(this.life == 0){
-            this.main.addCell(this.x, this.y, Types.air)
+            this.main.addCell(this.x, this.y, Types.ash)
         }
+
+        this.draw()
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, 1, 1)
+    }
+}
+
+export class AshCell extends Cell{
+    constructor(ctx,x,y,type){
+        super(ctx,x,y,type)
+    }
+    update(){
+        
+        let x = this.x;
+        let y = this.y;
+        let nextX = x;
+        let nextY = y;
+        try{
+            if(this.main.isCellFree([x,y+1], this)){
+                nextY = y+1
+            } else if(this.main.isCellFree([x-1,y+1], this)){
+                nextY = y+1
+                nextX = x-1
+            } else if(this.main.isCellFree([x+1,y+1], this)){
+                nextY = y+1
+                nextX = x+1
+            }
+        } catch{}
+        
+
+        this.main.swapCells([x,y], [nextX, nextY])
 
         this.draw()
     }
@@ -520,6 +553,13 @@ export const Types = {
         density: 20,
         temp: 24,
         constructor:  WoodCell
+    },
+    "ash": {
+        name: "ash",
+        colors: ["#9c9a9a", "#787777", "#b5b5b5"],
+        density: 4,
+        temp: 24,
+        constructor: AshCell
     },
     "steel": {
         name: "steel",

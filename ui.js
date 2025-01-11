@@ -1,6 +1,15 @@
 import { main } from "./main.js";
 import { Types } from "./Cell.js";
 
+var brush = 4;
+
+function setBrushSize(event){
+    brush = parseInt(event.target.value)
+    document.getElementById("brush-out").innerText = `Brush size: ${brush}`
+}
+
+document.getElementById("brush").oninput = setBrushSize
+
 function getCursorPosition(canvas, event) {
     const rect = canvas.getBoundingClientRect()
     const scaleX = canvas.width / rect.width; 
@@ -60,13 +69,26 @@ document.getElementById("steelBtn").onclick = ()=>{typeName="steel"}
 setInterval(()=>{        
     if(mouse){
         try{
-            main.addCell(mousePosition[0], mousePosition[1], Types[typeName])
-            main.addCell(mousePosition[0]-1, mousePosition[1], Types[typeName])
-            main.addCell(mousePosition[0]+1, mousePosition[1], Types[typeName])
-            main.addCell(mousePosition[0], mousePosition[1]-1, Types[typeName])
-            main.addCell(mousePosition[0], mousePosition[1]+1, Types[typeName])
-        } catch{
+            //main.addCell(mousePosition[0], mousePosition[1], Types[typeName])
+            //main.addCell(mousePosition[0]-1, mousePosition[1], Types[typeName])
+            //main.addCell(mousePosition[0]+1, mousePosition[1], Types[typeName])
+            //main.addCell(mousePosition[0], mousePosition[1]-1, Types[typeName])
+            //main.addCell(mousePosition[0], mousePosition[1]+1, Types[typeName])
 
+            
+    }
+         catch{
+
+        }
+
+        let halfSize = Math.floor(brush / 2);
+
+        for (let i = -halfSize; i <= halfSize; i++) {
+            for (let j = -halfSize; j <= halfSize; j++) {
+                if (i * i + j * j <= halfSize * halfSize) {
+                    main.addCell(mousePosition[0]+i, mousePosition[1]+j, Types[typeName])
+                }
+            }
         }
         
     }

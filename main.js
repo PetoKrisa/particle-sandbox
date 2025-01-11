@@ -52,9 +52,14 @@ class Main{
     }
 
     addCell(x,y,type){
-        if(0<=x<this.width && 0<=y<this.height){
-            this.cells[y][x] = new type.constructor(this, x, y, type)
+        try{
+            if(0<=x<this.width && 0<=y<this.height){
+                this.cells[y][x] = new type.constructor(this, x, y, type)
+            }
+        } catch(e){
+
         }
+       
         
     }
 

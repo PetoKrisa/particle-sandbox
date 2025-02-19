@@ -191,7 +191,7 @@ export class SmokeCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 150;
+        this.life = Math.random() * (180 - 120) + 120;
     }
 
 
@@ -205,21 +205,19 @@ export class SmokeCell extends Cell{
         let freeCells = [];
         if(this.main.isCellFree([x,y-1], this)){
             freeCells.push([x,y-1])
-        } if(this.main.isCellFree([x-1,y-1], this )){
+        }
+        if(this.main.isCellFree([x-1,y-1], this )){
             freeCells.push([x-1,y-1])
-        } if(this.main.isCellFree([x+1,y-1], this)){
+        } 
+        if(this.main.isCellFree([x+1,y-1], this)){
             freeCells.push([x+1,y-1])
         }
-
-        if(freeCells.length == 0){
-            if(this.main.isCellFree([x+1,y], this)){
-                freeCells.push([x+1,y])
-            }
-            if(this.main.isCellFree([x-1,y], this)){
-                freeCells.push([x-1,y])
-            }
+        if(this.main.isCellFree([x+1,y], this)){
+            freeCells.push([x+1,y])
         }
-        
+        if(this.main.isCellFree([x-1,y], this)){
+            freeCells.push([x-1,y])
+        }
         let randomNumber = Math.floor(Math.random() * (freeCells.length))
         let nextFreeCell = freeCells[randomNumber]
         try{
@@ -307,11 +305,82 @@ export class FireCell extends Cell{
     }
 }
 
+export class SmokelessFireCell extends Cell{
+    life;
+    constructor(ctx,x,y,type){
+        super(ctx,x,y,type)
+        this.life = 15;
+    }
+
+
+    update(){
+        if(this.life<1){
+            this.main.addCell(this.x, this.y, Types.air)
+        }
+
+        let x = this.x;
+        let y = this.y;
+        let freeCells = [];
+        if(this.main.isCellFree([x-1,y-1], this )){
+            freeCells.push([x-1,y-1])
+        } if(this.main.isCellFree([x+1,y-1], this)){
+            freeCells.push([x+1,y-1])
+        }
+
+        if(freeCells.length == 0){
+            if(this.main.isCellFree([x-1,y], this)){
+                freeCells.push([x-1,y])
+            }
+            if(this.main.isCellFree([x+1,y], this)){
+                freeCells.push([x+1,y])
+            }
+        }
+
+        if(this.main.isCellFree([x,y-1], this)){
+            freeCells = [[x,y-1]]
+        }
+
+        try{
+            if(this.main.getCell([x-1,y-1]).type == Types.water ||
+            this.main.getCell([x,y-1]).type == Types.water ||
+            this.main.getCell([x+1,y-1]).type == Types.water ||
+            this.main.getCell([x-1,y]).type == Types.water ||
+            this.main.getCell([x+1,y]).type == Types.water ||
+            this.main.getCell([x,y+1]).type == Types.water ||
+            this.main.getCell([x-1,y+1]).type == Types.water ||
+            this.main.getCell([x+1,y+1]).type == Types.water
+            ){
+                this.main.addCell(x,y,Types.air)
+                return
+            }
+        } catch{
+            
+        }
+        
+        
+        let randomNumber = Math.floor(Math.random() * freeCells.length)
+        let nextFreeCell = freeCells[randomNumber]
+        try{
+            this.main.swapCells([x,y], [nextFreeCell[0], nextFreeCell[1]])
+        } catch{
+        }
+
+        
+
+        this.life--;
+        this.draw()
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, 1, 1)
+    }
+}
+
 export class SteamCell extends Cell{
     life;
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.life = 120;
+        this.life = Math.random() * (180 - 120) + 120;;
     }
 
 
@@ -325,20 +394,20 @@ export class SteamCell extends Cell{
         let freeCells = [];
         if(this.main.isCellFree([x,y-1], this)){
             freeCells.push([x,y-1])
-        } if(this.main.isCellFree([x-1,y-1], this )){
+        } 
+        if(this.main.isCellFree([x-1,y-1], this )){
             freeCells.push([x-1,y-1])
-        } if(this.main.isCellFree([x+1,y-1], this)){
+        } 
+        if(this.main.isCellFree([x+1,y-1], this)){
             freeCells.push([x+1,y-1])
         }
-
-        if(freeCells.length == 0){
-            if(this.main.isCellFree([x+1,y], this)){
-                freeCells.push([x+1,y])
-            }
-            if(this.main.isCellFree([x-1,y], this)){
-                freeCells.push([x-1,y])
-            }
+        if(this.main.isCellFree([x+1,y], this)){
+            freeCells.push([x+1,y])
         }
+        if(this.main.isCellFree([x-1,y], this)){
+            freeCells.push([x-1,y])
+        }
+        
         
         let randomNumber = Math.floor(Math.random() * (freeCells.length))
         let nextFreeCell = freeCells[randomNumber]
@@ -358,7 +427,7 @@ export class SteamCell extends Cell{
 export class WoodCell extends Cell{
     constructor(ctx,x,y,type){
         super(ctx,x,y,type)
-        this.timeToIgnite = 80;
+        this.timeToIgnite = 49;
         this.life = 180;
         this.onFire == false;
     }
@@ -496,6 +565,70 @@ export class SteelCell extends Cell{
     }
 }
 
+export class FuseCell extends Cell{
+    constructor(ctx,x,y,type){
+        super(ctx,x,y,type)
+        this.timeToIgnite = 2;
+        this.life = 55;
+        this.onFire == false;
+    }
+    timeToIgnite;
+    onFire;
+    life;
+    update(){
+        
+        let x = this.x
+        let y = this.y
+        let neigbours = [
+            [x-1,y-1],
+            [x,y-1],
+            [x+1,y-1],
+            [x-1,y],
+            [x+1,y],
+            [x+1,y+1],
+            [x,y+1],
+            [x-1,y+1]
+        ]
+        let tempSum = 0;
+        let tempNum = 0;
+        for(let i of neigbours){
+            tempSum += this.main.getCell(i).temp
+            tempNum ++
+        }
+        let avgTemp = Math.floor(tempSum/tempNum)
+
+        if(avgTemp>130 && this.timeToIgnite > 0){
+            this.timeToIgnite --;
+        } else if(this.timeToIgnite==0){
+            this.onFire = true;
+        }
+
+        if(this.onFire == true){
+            this.life --;
+            try{
+                this.main.addCell(this.x, this.y-1, Types.smokelessFire)
+                this.main.addCell(this.x-1, this.y, Types.smokelessFire)
+                this.main.addCell(this.x+1, this.y, Types.smokelessFire)
+                this.main.addCell(this.x, this.y+1, Types.smokelessFire)
+                this.main.addCell(this.x-1, this.y+1, Types.smokelessFire)
+                this.main.addCell(this.x+1, this.y+1, Types.smokelessFire)
+            }catch{
+
+            }
+        }
+
+        if(this.life == 0){
+            this.main.addCell(this.x, this.y, Types.air)
+        }
+
+        this.draw()
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, 1, 1)
+    }
+}
+
 export const Types = {
     "sand": {
         name: "sand",
@@ -540,6 +673,13 @@ export const Types = {
         temp: 600,
         constructor:  FireCell
     },
+    "smokelessFire": {
+        name: "smokelessFire",
+        colors: ["#ff4f1f", "#ed5205", "#f22c2c"],
+        density: 10,
+        temp: 2000,
+        constructor:  SmokelessFireCell
+    },
     "steam": {
         name: "steam",
         colors: ["#c2cacf", "#d3e4ed", "#cdd0d1"],
@@ -567,5 +707,12 @@ export const Types = {
         density: 20,
         temp: 24,
         constructor:  SteelCell
+    },
+    "fuse": {
+        name: "fuse",
+        colors: ["gray"],
+        density: 20,
+        temp: 24,
+        constructor:  FuseCell
     }
 }

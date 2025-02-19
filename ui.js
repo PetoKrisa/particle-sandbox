@@ -62,6 +62,7 @@ document.getElementById("fireBtn").onclick = ()=>{typeName="fire"}
 document.getElementById("steamBtn").onclick = ()=>{typeName="steam"}
 document.getElementById("woodBtn").onclick = ()=>{typeName="wood"}
 document.getElementById("steelBtn").onclick = ()=>{typeName="steel"}
+document.getElementById("fuseBtn").onclick = ()=>{typeName="fuse"}
 
 
 
@@ -76,7 +77,7 @@ setInterval(()=>{
             //main.addCell(mousePosition[0], mousePosition[1]+1, Types[typeName])
 
             
-    }
+        }
          catch{
 
         }
